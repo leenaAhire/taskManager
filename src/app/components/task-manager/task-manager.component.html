@@ -1,0 +1,68 @@
+<div class="container mt-4 task-container">
+  <h3 class="text-center mb-4">Task Manager</h3>
+
+  <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="mb-3">
+    <div class="d-flex gap-2">
+      <input
+        class="form-control"
+        placeholder="Add New Task"
+        formControlName="title"
+        [class.is-invalid]="taskForm.get('title')?.invalid && taskForm.get('title')?.dirty">
+      <button class="btn btn-primary px-4">Add</button>
+    </div>
+    <div
+          class="text-danger mt-1"
+          *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.dirty">
+          Task title is required
+        </div>
+  </form>
+
+  <div class="d-flex justify-content-center gap-4 mb-4 filter-tabs">
+    <button
+      class="btn"
+      [class.active]="filter === 'All'"
+      (click)="filter='All'">
+      All
+    </button>
+
+    <button
+      class="btn"
+      [class.active]="filter === 'Completed'"
+      (click)="filter='Completed'">
+      Completed
+    </button>
+
+    <button
+      class="btn"
+      [class.active]="filter === 'Pending'"
+      (click)="filter='Pending'">
+      Pending
+    </button>
+  </div>
+
+
+  <div class="list-group task-list">
+    <div
+      class="list-group-item d-flex justify-content-between align-items-center"
+      *ngFor="let task of filteredTasks()">
+
+      <div class="d-flex align-items-center gap-3">
+        <input
+          type="checkbox"
+          class="form-check-input round-checkbox"
+          [checked]="task.status === 'Completed'"
+          (change)="changeStatus(task, $event)">
+
+        <span
+          [class.completed]="task.status === 'Completed'">
+          {{ task.title }}
+        </span>
+      </div>
+
+      <button class="btn btn-outline-secondary btn-sm"
+              (click)="deleteTask(task.id)">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
